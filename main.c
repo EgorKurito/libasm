@@ -51,7 +51,6 @@ void second_check_strlen()
 	// printf("\n");
 }
 
-
 void first_check_strcpy(char *src)
 {
 	char	s1[BUF];
@@ -114,6 +113,46 @@ void second_check_strcpy()
 	// printf("\n");
 }
 
+void first_check_strcmp(char *s1, char *s2)
+{
+	if ((strcmp(s1, s2) == ft_strcmp(s1, s2)) || (strcmp(s1, s2) < 0 && ft_strcmp(s1, s2) < 0) || (strcmp(s1, s2) > 0 && ft_strcmp(s1, s2) > 0))
+		printf("\033[48;2;0;250;154m\033[38;2;0;0;0m[OK]\033[0m   ");
+	else
+		printf("\033[1m\033[48;2;175;135;255m\033[38;2;255;255;255m[KO]\033[0m   ");
+	printf("std: |%d|, asm: |%d|\n", strcmp(s1, s2), ft_strcmp(s1, s2));
+}
+
+void second_check_strcmp()
+{
+	char *empty = "";
+	char *hello_world = "Hello world !";
+	char *hello_human = "Hello human !";
+	char *hello_world2 = "Hello world !";
+
+	printf("%-20s: \"%s\"\n", "char *", hello_world);
+	printf("%-20s: \"%s\"\n", "compared to", hello_human);
+	printf("%-20s: \"%d\"\n", "libc", strcmp(hello_world, hello_human));
+	printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(hello_world, hello_human));
+	printf("\n");
+	printf("%-20s: \"%s\"\n", "char *", hello_world);
+	printf("%-20s: \"%s\"\n", "compared to", hello_world2);
+	printf("%-20s: \"%d\"\n", "libc", strcmp(hello_world, hello_world2));
+	printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(hello_world, hello_world2));
+	printf("\n");
+	printf("%-20s: \"%s\"\n", "char *", hello_world2);
+	printf("%-20s: \"%s\"\n", "compared to", empty);
+	printf("%-20s: \"%d\"\n", "libc", strcmp(hello_world2, empty));
+	printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(hello_world2, empty));
+	printf("\n");
+
+	// //------- NULL = SEGFAULT
+	// printf("%-20s: \"%s\"\n", "char *", hello_world2);
+	// printf("%-20s: %s\n", "compared to", "NULL");
+	// //printf("%-20s: \"%d\"\n", "libc", strcmp(NULL, hello_world2));
+	// printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(NULL, empty));
+	// // printf("\n");
+}
+
 int main()
 {
 	char longstr[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tellus metus, finibus quis sagittis quis, volutpat a justo. Nunc et pellentesque quam. Fusce aliquam aliquam libero, sed pulvinar nullam.";
@@ -139,4 +178,22 @@ int main()
 	first_check_strcpy(longstr);
 	printf("\n-----------------------SECOND----------------------\n\n");
 	second_check_strcpy();
+
+	printf("\n================================\n");
+	printf("========== FT_STRCMP ===========\n");
+	printf("================================\n\n");
+	printf("-----------------------FIRST----------------------\n\n");
+	first_check_strcmp("Hello", "");
+	first_check_strcmp("", "World");
+	first_check_strcmp("Hello", "Hel");
+	first_check_strcmp("Hel", "Hello");
+	first_check_strcmp("", "");
+	first_check_strcmp("Hello", "Hello");
+	first_check_strcmp(longstr, longstr);
+	first_check_strcmp(" ", "");
+	first_check_strcmp("Helloo", "Hello");
+	first_check_strcmp("", " ");
+	first_check_strcmp("Hello", "Helloo");
+	printf("\n-----------------------SECOND----------------------\n\n");
+	second_check_strcmp();
 }

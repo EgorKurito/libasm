@@ -13,12 +13,12 @@
 #ifndef LIBASM_H
 # define LIBASM_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <string.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <errno.h>
 
 # define RESET	"\033[0m"
 # define RED	"\033[31m"
@@ -28,5 +28,6 @@
 size_t			ft_strlen(const char *str);
 char			*ft_strcpy(char *dst, const char *src);
 int				ft_strcmp(const char *s1, const char *s2);
+ssize_t			ft_write(int fildes, const void *buf, size_t nbyte);
 
 #endif

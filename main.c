@@ -12,6 +12,8 @@
 
 # include "libasm.h"
 
+int fd, ret;
+
 void first_check_strlen(char *src)
 {
 	if (strlen(src) == ft_strlen(src))
@@ -153,6 +155,87 @@ void second_check_strcmp()
 	// // printf("\n");
 }
 
+void first_check_write()
+{
+	int fd;
+	char *str = "Hello world\n";
+
+	printf("\033[0;32m\n=== ft_write ===\n\033[0m");
+
+	ft_write(1, str, 12);
+	write(1, str, 12);
+
+	ft_write(1, &"", 1);
+	ft_write(1, &"\n", 1);
+	write(1, &"", 1);
+	write(1, &"\n", 1);
+
+	fd = open("write2.txt", O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR);
+	ft_write(fd, str, 12);
+	write(fd, str, 12);
+	close(fd);
+
+	errno = 0;
+	ft_write(-1, str, 12);
+	printf("errno => %d\n", errno);
+
+	errno = 0;
+	write(-1, str, 12);
+	printf("errno => %d\n", errno);
+
+	fd = open("write.txt", O_WRONLY);
+	ft_write(fd, str, 12);
+	write(fd, str, 12);
+	close(fd);
+}
+
+void second_check_write()
+{
+	char *str = "Test write";
+	char *empty = "";
+	//char *str1=strdup("test");
+	int errno_tmp;
+
+	printf("\n================================\n");
+	printf("========== FT_WRITE ============\n");
+	printf("================================\n\n");
+	printf("%-20s: \"%s\"\n", "char *", str);
+	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, str, 7));
+	// printf("\n");
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(1, str, 7));
+	printf("\n");
+	printf("%-20s: \"%s\"\n", "char *", empty);
+	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, empty, 0));
+	// printf("\n");
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(1, empty, 0));
+	printf("\n");
+	printf("%-20s: \"%s\"\n", "char *", str);
+	printf("%-20s: \"Libc:%zd\"\n", "libc", write(-7, NULL, 7));
+	// printf("\n");
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(-7, NULL, 7));
+
+	fd = open("write.txt", O_CREAT | O_APPEND | O_WRONLY, 0755);
+	ft_write(fd, str, strlen(str));
+	write(fd, str, strlen(str));
+	close(fd);
+
+	errno = 0;
+	ret = ft_write(-1, str, strlen(str));
+	printf("errno = %d\n", (errno_tmp = errno));
+
+	errno = 0;
+	ret = write(-1, str, strlen(str));
+	printf("errno = %d\n", errno);
+	if (errno_tmp != errno)
+	printf("not equal");
+
+
+	printf("\n");
+	printf("error: %zd, %s\n", ft_write(211, str, strlen(str)), strerror(errno));
+	printf("error: %zd, %s\n", write(211, str, strlen(str)), strerror(errno));
+
+}
+
 int main()
 {
 	char longstr[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tellus metus, finibus quis sagittis quis, volutpat a justo. Nunc et pellentesque quam. Fusce aliquam aliquam libero, sed pulvinar nullam.";
@@ -196,4 +279,12 @@ int main()
 	first_check_strcmp("Hello", "Helloo");
 	printf("\n-----------------------SECOND----------------------\n\n");
 	second_check_strcmp();
+
+	printf("\n================================\n");
+	printf("========== FT_WRITE ============\n");
+	printf("================================\n\n");
+	printf("-----------------------FIRST----------------------\n\n");
+	first_check_write();
+	printf("\n-----------------------SECOND----------------------\n\n");
+	second_check_write();
 }

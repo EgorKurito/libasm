@@ -1,6 +1,5 @@
 section .text
-
-global	_ft_strcpy 				; dst = rdi, src = rsi
+	global	_ft_strcpy 				; dst = rdi, src = rsi
 
 _ft_strcpy:
 	mov	rcx, 0

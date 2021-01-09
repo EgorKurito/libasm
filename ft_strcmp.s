@@ -1,6 +1,5 @@
 section .text
-
-global _ft_strcmp				; str1 = rdi, str2 = rsi
+	global _ft_strcmp				; str1 = rdi, str2 = rsi
 
 _ft_strcmp:
 	mov rax, 0

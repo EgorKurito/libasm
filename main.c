@@ -196,9 +196,6 @@ void second_check_write()
 	//char *str1=strdup("test");
 	int errno_tmp;
 
-	printf("\n================================\n");
-	printf("========== FT_WRITE ============\n");
-	printf("================================\n\n");
 	printf("%-20s: \"%s\"\n", "char *", str);
 	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, str, 7));
 	// printf("\n");
@@ -233,7 +230,106 @@ void second_check_write()
 	printf("\n");
 	printf("error: %zd, %s\n", ft_write(211, str, strlen(str)), strerror(errno));
 	printf("error: %zd, %s\n", write(211, str, strlen(str)), strerror(errno));
+}
 
+void first_check_read(int fd1, int fd2, int read_size)
+{
+	errno = 0;
+
+	char	buf1[BUF];
+	bzero(buf1, BUF);
+	char	buf2[BUF];
+	bzero(buf2, BUF);
+	int std_err = 0;
+	int ft_w_err = 0;
+	int flag_err = 0;
+
+	int std = read(fd1, buf1, read_size);
+	if (std < 0)
+	{
+		flag_err = 1;
+		std_err = errno;
+		errno = 0;
+	}
+	int	ft_w = ft_read(fd2, buf2, read_size);
+	if (ft_w < 0)
+	{
+		flag_err = 1;
+		ft_w_err = errno;
+		errno = 0;
+	}
+	if (flag_err)
+	{
+		if (std_err == ft_w_err)
+			printf("\033[48;2;0;250;154m\033[38;2;0;0;0m[OK]\033[0m   ");
+		else
+			printf("\033[1m\033[48;2;175;135;255m\033[38;2;255;255;255m[KO]\033[0m   ");
+	}
+	else
+	{
+		if (std == ft_w && (strcmp(buf1, buf2) == 0))
+			printf("\033[48;2;0;250;154m\033[38;2;0;0;0m[OK]\033[0m   ");
+		else
+			printf("\033[1m\033[48;2;175;135;255m\033[38;2;255;255;255m[KO]\033[0m   ");
+	}
+	printf("std_len: |%4d|, asm_len: |%4d|, std_err: |%4d|, asm_err: |%4d|\n", std, ft_w, std_err, ft_w_err);
+}
+
+void second_check_read()
+{
+	int fd = open("main.c", O_RDONLY);
+	char buff1[891];
+	int ret = 1;
+
+	printf("%-20s: \n", "header main.c | libc ");
+	ret = read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	close(fd);
+	fd = open("main.c", O_RDONLY);
+	clear_buffer(buff1, 891);
+	printf("%-20s: \n", "header main.c | libasm ");
+	ret = ft_read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	clear_buffer(buff1, 891);
+	close(fd);
+
+	fd = open("test", O_RDONLY);
+	printf("%-20s: \n", "file test | libc ");
+	ret = read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	close(fd);
+	fd = open("test", O_RDONLY);
+	clear_buffer(buff1, 891);
+	printf("%-20s: \n", "file test | libasm ");
+	ret = ft_read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	clear_buffer(buff1, 891);
+	close(fd);
+
+	fd = open("wrong", O_RDONLY);
+	printf("%-20s: \n", "wrong | libc ");
+	ret = read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	close(fd);
+	fd = open("wrong", O_RDONLY);
+	clear_buffer(buff1, 891);
+	printf("%-20s: \n", "wrong | libasm ");
+	ret = ft_read(fd, buff1, 890);
+	buff1[ret] = 0;
+	printf("[return : %d]\n|%s|\n", ret, buff1);
+	printf("\n");
+	clear_buffer(buff1, 891);
+	close(fd);
 }
 
 int main()
@@ -287,4 +383,26 @@ int main()
 	first_check_write();
 	printf("\n-----------------------SECOND----------------------\n\n");
 	second_check_write();
+
+	printf("\n================================\n");
+	printf("========== FT_READ =============\n");
+	printf("================================\n\n");
+	printf("-----------------------FIRST----------------------\n\n");
+	int fd1, fd2;
+	fd1 = open("write.txt", O_RDONLY);
+	fd2 = open("write.txt", O_RDONLY);
+	first_check_read(fd1, fd2, BUF);
+	first_check_read(fd1, fd2, 0);
+	first_check_read(fd1, fd2, 1);
+	first_check_read(fd1, fd2, 10);
+	first_check_read(fd1, fd2, -1);
+	first_check_read(fd1, fd2, 5);
+	first_check_read(-1, -1, 0);
+	first_check_read(-1, -1, -1);
+	first_check_read(-1, -1, 10);
+	first_check_read(200, 200, 0);
+	first_check_read(200, 200, -1);
+	first_check_read(200, 200, 10);
+	printf("\n-----------------------SECOND----------------------\n\n");
+	second_check_read();
 }

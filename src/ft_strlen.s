@@ -7,9 +7,9 @@ _ft_strlen:
 
 while:
 	cmp	BYTE [rdi + rax], 0
-	je	end					; end if true
-	inc	rax					; i++
-	jmp	while				; go to while
+	je	end						; end if true
+	inc	rax						; i++
+	jmp	while					; go to while
 
 end:
 	ret

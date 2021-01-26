@@ -6,19 +6,20 @@
 #    By: hanguy <hanguy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/18 20:15:21 by hanguy            #+#    #+#              #
-#    Updated: 2020/10/04 13:05:34 by hanguy           ###   ########.fr        #
+#    Updated: 2021/01/26 13:05:34 by hanguy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libasm.a
 
-TEST = test.a
+S_SRCS = ft_strlen.s			\
+		ft_strcpy.s			\
+		ft_strcmp.s			\
+		ft_write.s			\
+		ft_read.s			\
+		ft_strdup.s
 
-SRCS = 	ft_strlen.s \
-		ft_strcpy.s \
-		ft_strcmp.s \
-		ft_write.s \
-		ft_read.s \
+SRCS = $(addprefix src/, $(S_SRCS))
 
 OBJS = $(SRCS:.s=.o)
 
@@ -36,9 +37,9 @@ clean:
 	rm -rf $(OBJS)
 
 fclean: clean
-	rm -rf $(NAME) $(TEST)
+	rm -rf $(NAME) test.a write.txt write2.txt
 
 re: fclean all
 
 test:
-	gcc -Wall -Wextra -Werror main.c -L. libasm.a -o $(TEST)
+	gcc -Wall -Wextra -Werror main.c -L. libasm.a -o test.a

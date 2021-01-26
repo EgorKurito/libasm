@@ -6,8 +6,8 @@ _ft_strcpy:
 	mov rbx, 0
 
 while:
-	mov bl, byte [rsi + rcx] 	; bl = rsi[rcx]
-	mov byte [rdi + rcx], bl 	; rdi[rcx] = bl
+	mov bl, byte [rsi + rcx] 		; bl = rsi[rcx]
+	mov byte [rdi + rcx], bl 		; rdi[rcx] = bl
 	inc rcx
 	cmp bl, 0
 	je	end

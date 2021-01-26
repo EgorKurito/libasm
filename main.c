@@ -6,7 +6,7 @@
 /*   By: hanguy <hanguy@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/30 13:09:20 by hanguy            #+#    #+#             */
-/*   Updated: 2020/04/30 13:09:20 by hanguy           ###   ########.fr       */
+/*   Updated: 2021/01/26 13:09:20 by hanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,61 @@ void second_check_read()
 	close(fd);
 }
 
+void	first_check_strdup(char *str)
+{
+	char *s1 = strdup(str);
+	char *s2 = ft_strdup(str);
+	if (strcmp(s1, s2) == 0)
+		printf("\033[48;2;0;250;154m\033[38;2;0;0;0m[OK]\033[0m   ");
+	else
+		printf("\033[1m\033[48;2;175;135;255m\033[38;2;255;255;255m[KO]\033[0m   ");
+	printf("std: |%s|, asm: |%s| len std: |%ld|, len asm: |%ld|\n", s1, s2, strlen(s1), strlen(s2));
+	free(s1);
+	free(s2);
+}
+
+void second_check_strdup()
+{
+	char *hello_world = "Hello world !";
+	char *empty = "";
+	char *save;
+	char *save2;
+
+	printf("%-20s: \"%s\"\n", "char *", hello_world);
+	save = strdup(hello_world);
+	printf("%-20s: \"%s\"\n", "libc", save);
+	free(save);
+	save = NULL;
+	save2 = ft_strdup(hello_world);
+	printf("%-20s: \"%s\"\n", "libasm", save2);
+	free(save2);
+	save2 = NULL;
+	printf("\n");
+
+	printf("%-20s: \"%s\"\n", "char *", empty);
+	save = strdup(empty);
+	printf("%-20s: \"%s\"\n", "libc", save);
+	free(save);
+	save = NULL;
+	save2 = ft_strdup(empty);
+	printf("%-20s: \"%s\"\n", "libasm", save2);
+	free(save2);
+	save2 = NULL;
+	printf("\n");
+
+	//------- NULL = SEGFAULT
+	//printf("%-20s: NULL\n", "char *");
+	// save = strdup(NULL);
+	// printf("%-20s: \"%s\"\n", "libc", save);
+	// free(save);
+	// save = NULL;
+	// save2 = ft_strdup(NULL);
+	// printf("%-20s: \"%s\"\n", "libasm", save2);
+	// free(save2);
+	// save2 = NULL;
+	// printf("\n");
+}
+
 int main()
 {
 	char longstr[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tellus metus, finibus quis sagittis quis, volutpat a justo. Nunc et pellentesque quam. Fusce aliquam aliquam libero, sed pulvinar nullam.";
@@ -405,4 +460,14 @@ int main()
 	first_check_read(200, 200, 10);
 	printf("\n-----------------------SECOND----------------------\n\n");
 	second_check_read();
+
+	printf("\n================================\n");
+	printf("========== FT_STRDUP ===========\n");
+	printf("================================\n\n");
+	printf("-----------------------FIRST----------------------\n\n");
+	first_check_strdup("");
+	first_check_strdup("lolkek");
+	first_check_strdup(longstr);
+	printf("\n-----------------------SECOND----------------------\n\n");
+	second_check_strdup();
 }

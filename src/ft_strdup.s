@@ -5,18 +5,18 @@ section .text
 	extern _malloc
 
 _ft_strdup:
-	push rdi         		; save rdi
+	push rdi         		; save rdi (*s1)
 	call _ft_strlen  		; rdi is still == str
-	inc  rax          		; len++ for '\0'
+	inc  rax          		; += 1 for '\0'
 
-	mov  rdi, rax     		; size to malloc
+	mov  rdi, rax     		; malloc get num of bytes in rdi
 	call _malloc			; rax = (void *)malloc return
 	cmp  rax, 0
 	je   _err
 
 	pop  rsi          		; original str as src
 	mov  rdi, rax     		; allocated as dest
-	call _ft_strcpy
+	call _ft_strcpy			; it will copy rsi to rdi and mov rdi to rax
 	ret
 _err:
 	pop  rdi

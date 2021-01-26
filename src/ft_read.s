@@ -3,7 +3,7 @@ section .text
 	extern ___error
 
 _ft_read:
-	mov rax, 0x2000003
+	mov rax, 0x2000003	; read instruction
 	syscall 			; syscall's return in rax
 	jc _err 			; if err => carry flag = 1, rax = err_num
 	ret
